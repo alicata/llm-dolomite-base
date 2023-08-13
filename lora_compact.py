@@ -82,7 +82,7 @@ def setup(
     out_dir: Path = Path("out/lora/alpaca"),
     precision: Optional[str] = None,
     tpu: bool = False,
-    resume: bool = True,
+    resume: bool = False,
 ):
     if precision is None:
         precision = "32-true" if tpu else "bf16-mixed"
