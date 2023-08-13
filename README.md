@@ -31,3 +31,10 @@ python scripts/convert_lit_checkpoint.py \
 ## Mods
 Most src files are mods of [lit-gpt](https://github.com/Lightning-AI/lit-gpt) code to make reproducibility more consistent and easier, however the baselines should work also with bare pytorch train code
 
+# Exploartory Data Analysis
+* [Alpaca dataset](https://github.com/alicata/llm-dolomite-base/blob/main/tuning_data/dataset_alpaca.md)
+* [RefineWeb](https://github.com/alicata/llm-dolomite-base/blob/main/tuning_data/dataset_refineweb.md)
+* [CommonCrawl](https://github.com/alicata/llm-dolomite-base/blob/main/tuning_data/dataset_commoncrawl.md)
+  
+
+
