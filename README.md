@@ -18,6 +18,16 @@ The main script is <b>[finetune_falcon-7b_lora_A100_40GB](https://github.com/ali
 ### Downloaded Falcon-7b Weights and Dataset 
 ![pretrained](https://github.com/alicata/llm-dolomite-base/blob/main/fs_pretrained_checkpoints_dataset.png)
 
+## Convert Finetuned Model back to Original Weights Format
+After finetuning with LoRA, covert the finetuned model output/lit_model_lora_finetuned.pth back to its original weights naming convention. 
+
+Use --checkpoint_name:
+```
+python scripts/convert_lit_checkpoint.py \
+    --checkpoint_name lit_model_lora_finetuned.pth \
+    --checkpoint_dir checkpoints/tiiuae/falcon-7b
+``` 
+
 ## Mods
 Most src files are mods of [lit-gpt](https://github.com/Lightning-AI/lit-gpt) code to make reproducibility more consistent and easier, however the baselines should work also with bare pytorch train code
 
