@@ -9,7 +9,7 @@ Baselines for fine-tuning common LLM models [Falcon-7b](https://huggingface.co/t
 ## Falcon Steps
 The main script is <b>[finetune_falcon-7b_lora_A100_40GB](https://github.com/alicata/llm-dolomite-base/blob/main/finetune_falcon-7b_A100-40GB.ipynb)</b>. The script setups lit-gpt repo, installs dependencies, downloads weights+data downloaded.
 
-* Launch an A100-40GB GPU run-time
+* [Launch](https://colab.research.google.com/drive/1nSmYyh4k-JfKmO-UuABLA2NZrLdpfBnu) an A100-40GB GPU run-time
 * Run script [finetune_falcon-7b_lora_A100_40GB](https://github.com/alicata/llm-dolomite-base/blob/main/finetune_falcon-7b_A100-40GB.ipynb)
 * Patch the [lit-gpt/finetune](https://github.com/Lightning-AI/lit-gpt/tree/main/finetune) folder with lora_compact.py (resolves A100-40GB memory conflicts)
 * Start finetuning training (50k iteration)
