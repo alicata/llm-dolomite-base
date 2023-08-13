@@ -1,5 +1,5 @@
 # llm-dolomite-base: fine-tuning
-Baselines for fine-tuning common LLM models [Falcon-7b](https://huggingface.co/tiiuae/falcon-7b), LLama2)
+Baselines for fine-tuning common LLM models ([Falcon-7b](https://huggingface.co/tiiuae/falcon-7b), LLama2)
 
 # GPU: A100 40GB VRAM 
 |  model    | pre-trained weights | fine-tuning method / dataset | fine-turning duration, iters | train/val loss | test acc | patch scripts & notebook |  
@@ -27,6 +27,15 @@ python scripts/convert_lit_checkpoint.py \
     --checkpoint_name lit_model_lora_finetuned.pth \
     --checkpoint_dir checkpoints/tiiuae/falcon-7b
 ``` 
+
+# Experiments Build Setups
+| build setup   | Cons | Pros | 
+| ------------ | ------------ |  ------------ | 
+| finetune_falcon-7b_A100-40GB.ipynb, lit-gpt, lora.py patch  | need to patch checked out repo with lora_compact.py  | sync easily with lit-gpt |
+| finetune_falcon-7b_A100-40GB.ipynb, forked lit-gpt | fork can get out-of-sync | no patch, single setup step with notebook |
+| finetune_falcon-7b_A100-40GB_mods.ipynb | needs 1-time testing for customization of lora.py  | single step script, best for testing setup on Lambda/Colab |
+
+
 
 ## Mods
 Most src files are mods of [lit-gpt](https://github.com/Lightning-AI/lit-gpt) code to make reproducibility more consistent and easier, however the baselines should work also with bare pytorch train code
