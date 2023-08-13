@@ -56,6 +56,7 @@ def setup(
     out_dir: Path = Path("out/lora/alpaca"),
     precision: Optional[str] = None,
     tpu: bool = False,
+    resume: Union[bool, Path] = False,
 ):
     if precision is None:
         precision = "32-true" if tpu else "bf16-mixed"
@@ -78,10 +79,10 @@ def setup(
     logger = step_csv_logger(out_dir.parent, out_dir.name, flush_logs_every_n_steps=log_interval)
     fabric = L.Fabric(devices=fabric_devices, strategy=strategy, precision=precision, loggers=logger)
     fabric.print(hparams)
-    fabric.launch(main, data_dir, checkpoint_dir, out_dir)
+    fabric.launch(main, data_dir, checkpoint_dir, out_dir, resume)
 
 
-def main(fabric: L.Fabric, data_dir: Path, checkpoint_dir: Path, out_dir: Path):
+def main(fabric: L.Fabric, data_dir: Path, checkpoint_dir: Path, out_dir: Path, resume: bool):
     check_valid_checkpoint_dir(checkpoint_dir)
 
     speed_monitor = SpeedMonitor(fabric, window_size=50, time_unit="seconds")
@@ -128,8 +129,16 @@ def main(fabric: L.Fabric, data_dir: Path, checkpoint_dir: Path, out_dir: Path):
 
     fabric.seed_everything(1337 + fabric.global_rank)
 
+    state = {"model": model, "optimizer": optimizer, "hparams": hparams, "iter_num": 0, "step_count": 0}    
+    if resume is True:
+        resume = sorted(out_dir.glob("*.pth"))[-1]
+    if resume:
+        fabric.print(f"Resuming training from {resume}")
+        fabric.load(resume, state)
+        
     train_time = time.time()
-    train(fabric, model, optimizer, train_data, val_data, checkpoint_dir, out_dir, speed_monitor)
+    train(fabric, state, train_data, val_data, checkpoint_dir, out_dir, speed_monitor)
+    #train(fabric, model, optimizer, train_data, val_data, checkpoint_dir, out_dir, speed_monitor)
     fabric.print(f"Training time: {(time.time()-train_time):.2f}s")
 
     # Save the final LoRA checkpoint at the end of training
@@ -139,8 +148,9 @@ def main(fabric: L.Fabric, data_dir: Path, checkpoint_dir: Path, out_dir: Path):
 
 def train(
     fabric: L.Fabric,
-    model: GPT,
-    optimizer: torch.optim.Optimizer,
+    state: Dict,
+    # model: GPT,
+    # optimizer: torch.optim.Optimizer,
     train_data: List[Dict],
     val_data: List[Dict],
     checkpoint_dir: Path,
@@ -149,6 +159,10 @@ def train(
 ) -> None:
     tokenizer = Tokenizer(checkpoint_dir)
     max_seq_length, longest_seq_length, longest_seq_ix = get_max_seq_length(train_data)
+
+    # loaded 
+    model = state["model"]
+    optimizer = state["optimizer"]
 
     validate(fabric, model, val_data, tokenizer, longest_seq_length)  # sanity check
 
