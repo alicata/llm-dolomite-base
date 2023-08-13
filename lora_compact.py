@@ -22,7 +22,7 @@ baselines = {
     '1' : expr_stable_baseline,
     '2' : expr_new_baseline,
 }
-expr = baseline[2]
+expr = baselines[2]
 
 import os
 import sys
