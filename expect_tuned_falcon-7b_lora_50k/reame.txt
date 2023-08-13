@@ -1,0 +1,1 @@
+falcon-7b expected outputs with lora_compact (micro batch size = 2) @50k iterations and 
