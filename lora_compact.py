@@ -22,7 +22,7 @@ baselines = {
     '1' : expr_stable_baseline,
     '2' : expr_new_baseline,
 }
-expr = baselines[2]
+expr = baselines['2']
 
 import os
 import sys
@@ -82,7 +82,7 @@ def setup(
     out_dir: Path = Path("out/lora/alpaca"),
     precision: Optional[str] = None,
     tpu: bool = False,
-    resume: Union[bool, Path] = False,
+    resume: bool = True,
 ):
     if precision is None:
         precision = "32-true" if tpu else "bf16-mixed"
