@@ -4,7 +4,12 @@ Baselines for fine-tuning common LLM models ([Falcon-7b](https://huggingface.co/
 # GPU: A100 40GB VRAM 
 |  model    | pre-trained weights | fine-tuning method / dataset | fine-turning duration, iters | train/val loss | test acc | patch scripts & notebook |  
 | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ |  
-| falcon-7b   | tiiuae, RefinedWeb 1.5B tokens  | Lora, alpaca 52k instruction | 117 min, 50k | 3.6/8.8 | ~ | finetune_falcon-7b_lora_A100_40GB.ipynb |
+| falcon-7b   | tiiuae, RefinedWeb 1.5B tokens  | Lora, alpaca 52k instruction | 117 min, 50k | 3.6/8.8 *BUG?* | ~ | finetune_falcon-7b_A100_40GB.ipynb |
+| falcon-7b   | tiiuae, RefinedWeb 1.5B tokens  | Lora, alpaca 52k instruction | 117 min, 100k | 3.3/~8 *BUG?* | ~ | finetune_falcon-7b_A100_40GB.ipynb |
+| *falcon-7b*   | tiiuae, RefinedWeb 1.5B tokens  | adapter_v2, alpaca 52k instruction | 110 min, 35k | *0.5/15.8* | ~ | finetune_falcon-7b_A100_40GB_baselines.ipynb |
+
+### Best Baseline
+Falcon-7b + Adapter_V2 + Alpaca performance as expected even after few iterations loss < 1.0. Lora version seems buggy, train loss ~3 even after 100k iterations.
 
 ## Falcon Steps
 The main script is <b>[finetune_falcon-7b_lora_A100_40GB](https://github.com/alicata/llm-dolomite-base/blob/main/finetune_falcon-7b_A100-40GB.ipynb)</b>. The script setups lit-gpt repo, installs dependencies, downloads weights+data downloaded.
