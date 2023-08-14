@@ -11,6 +11,12 @@ Baselines for fine-tuning common LLM models ([Falcon-7b](https://huggingface.co/
 ### Best Baseline
 Falcon-7b + Adapter_V2 + Alpaca performance as expected even after few iterations loss < 1.0. Lora version seems buggy, train loss ~3 even after 100k iterations.
 
+### TODO
+* packaing: covert pth model to original format
+* validation: inference test/comparison of original and fine-tuned against Alpaca examples
+* run eval scripts to generate metrics
+* hoock metrics to weights and biases
+
 ## Falcon Steps
 The main script is <b>[finetune_falcon-7b_lora_A100_40GB](https://github.com/alicata/llm-dolomite-base/blob/main/finetune_falcon-7b_A100-40GB.ipynb)</b>. The script setups lit-gpt repo, installs dependencies, downloads weights+data downloaded.
 
