@@ -1,3 +1,29 @@
+# Experiment Setup
+#
+# External commandline flags
+# 'resume'           : True,         # auto resume from out_dir intermediate checkpoints (i.e. out/lora/alpaca/*.)
+# 'precision'        : 'bf16-true',  # reduce GPU peak memory < 24GB
+
+# Available Baselines
+expr_test_baseline = {
+    'max_iters'        : 2,            # few seconds
+    'micro_batch_size' : 2,            # reduce GPU peak memory < 24GB
+}
+expr_stable_baseline = {
+    'max_iters'        : 50000,        # ~2h CP
+    'micro_batch_size' : 2,            # reduce GPU peak memory < 24GB
+}
+expr_new_baseline = {
+    'max_iters'        : 100000,        # ~4h CP
+    'micro_batch_size' : 2,            # reduce GPU peak memory < 24GB
+}
+baselines = {
+    '0' : expr_test_baseline,
+    '1' : expr_stable_baseline,
+    '2' : expr_new_baseline,
+}
+expr = baselines['2']
+
 import os
 import sys
 import time
@@ -26,15 +52,15 @@ eval_iters = 100
 log_interval = 100
 devices = 1
 # change this value to force a maximum sequence length
-override_max_seq_length = 100 
+override_max_seq_length = None
 
 # Hyperparameters
 learning_rate = 3e-4
 batch_size = 128 
-micro_batch_size = 2
+micro_batch_size = expr['micro_batch_size']
 gradient_accumulation_iters = batch_size // micro_batch_size
 assert gradient_accumulation_iters > 0
-max_iters = 50000  # train dataset size
+max_iters = expr['max_iters']  # train dataset size
 weight_decay = 0.01
 lora_r = 8
 lora_alpha = 16
@@ -56,7 +82,7 @@ def setup(
     out_dir: Path = Path("out/lora/alpaca"),
     precision: Optional[str] = None,
     tpu: bool = False,
-    resume: Union[bool, Path] = False,
+    resume: bool = False,
 ):
     if precision is None:
         precision = "32-true" if tpu else "bf16-mixed"
